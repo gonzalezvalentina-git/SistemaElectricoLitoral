@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema Eléctrico – Región Litoral</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0a2a6e;
+    --secondary: #1565c0;
+    --accent: #1e88e5;
+    --accent-light: #42a5f5;
+    --bg: #f0f6ff;
+    --bg-card: #ffffff;
+    --bg-divider: #0d1f5c;
+    --text-main: #0d1b40;
+    --text-secondary: #2c4a8a;
+    --text-light: #ffffff;
+    --border: #bbdefb;
+    --grid-line: rgba(21,101,192,0.12);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(10,42,110,0.10);
+    --shadow-card: 0 2px 12px rgba(10,42,110,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #dce8f7;
+    padding: 32px 16px;
+    min-height: 100vh;
+  }
+
+  /* ─── NAV ─────────────────────────────────────── */
+  .nav-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    box-shadow: 0 2px 12px rgba(10,42,110,0.22);
+  }
+  .nav-title {
+    color: #fff;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    opacity: 0.92;
+  }
+  .nav-slides {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .nav-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.35);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    font-size: 10px;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+  }
+  .nav-dot:hover, .nav-dot.active {
+    background: var(--accent-light);
+    border-color: #fff;
+  }
+
+  /* ─── SLIDE WRAPPER ───────────────────────────── */
+  .slides-wrapper {
+    margin-top: 52px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ─── SLIDE BASE ──────────────────────────────── */
+  .slide {
+    background: var(--bg-card);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    scroll-margin-top: 68px;
+    position: relative;
+  }
+
+  /* Circuit grid background overlay */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 38px 38px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ─── SLIDE: COVER ────────────────────────────── */
+  .slide-cover {
+    background: linear-gradient(140deg, #071a52 0%, #0d2b8a 50%, #1565c0 100%);
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 56px 48px;
+    text-align: center;
+  }
+  .slide-cover::before {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 38px 38px;
+  }
+  .cover-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.28);
+    border-radius: 40px;
+    padding: 6px 22px;
+    color: #90caf9;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .cover-title {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .cover-title span {
+    color: #64b5f6;
+    display: block;
+  }
+  .cover-subtitle {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #bbdefb;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 44px;
+  }
+  .cover-divider {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, #42a5f5, #1565c0);
+    border-radius: 2px;
+    margin: 0 auto 36px;
+  }
+  .cover-integrantes {
+    background: rgba(255,255,255,0.09);
+    border: 1.5px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius);
+    padding: 22px 36px;
+    margin-bottom: 24px;
+    min-width: 320px;
+  }
+  .cover-integrantes p {
+    color: #e3f2fd;
+    font-size: 18px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.7;
+  }
+  .cover-inst {
+    color: #90caf9;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ─── SLIDE: DIVIDER ──────────────────────────── */
+  .slide-divider {
+    background: linear-gradient(120deg, #0d2060 0%, #1152a8 60%, #1976d2 100%);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 52px 48px;
+    text-align: center;
+  }
+  .slide-divider::before {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  }
+  .divider-number {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.06);
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .divider-tag {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #64b5f6;
+    background: rgba(100,181,246,0.12);
+    border: 1.5px solid rgba(100,181,246,0.3);
+    border-radius: 30px;
+    padding: 5px 18px;
+    margin-bottom: 20px;
+  }
+  .divider-title {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .divider-subtitle {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #bbdefb;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .divider-line {
+    width: 56px; height: 4px;
+    background: linear-gradient(90deg, #42a5f5, transparent);
+    border-radius: 2px;
+    margin: 22px auto 22px;
+  }
+
+  /* ─── SLIDE: CONTENT ──────────────────────────── */
+  .slide-content {
+    background: var(--bg);
+    padding: 0;
+  }
+  .slide-header {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    padding: 22px 36px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .slide-header-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .slide-header-text h2 {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+  }
+  .slide-header-text p {
+    font-size: 13px;
+    color: #90caf9;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .slide-body {
+    padding: 28px 36px 32px;
+    overflow-y: auto;
+    max-height: none;
+  }
+
+  /* ─── CARDS ───────────────────────────────────── */
+  .card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-card);
+  }
+  .card-title {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .dot {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .card p, .card li {
+    font-size: 15px;
+    color: var(--text-main);
+    line-height: 1.65;
+  }
+  .card ul {
+    padding-left: 18px;
+    margin-top: 6px;
+  }
+  .card li { margin-bottom: 4px; }
+
+  /* Chip tags */
+  .chip {
+    display: inline-block;
+    background: #e3f2fd;
+    color: var(--secondary);
+    border: 1px solid #90caf9;
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Exo 2', sans-serif;
+    letter-spacing: 0.04em;
+    margin: 2px 3px 2px 0;
+  }
+  .chip.green { background: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }
+  .chip.orange { background: #fff3e0; color: #e65100; border-color: #ffcc80; }
+  .chip.red { background: #ffebee; color: #c62828; border-color: #ef9a9a; }
+
+  /* Two-column grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .grid2-1{
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: 16px;
+  }
+  .grid1-3{
+    display: grid;
+    grid-template-columns: 1fr 0.5fr 0.5fr;
+    gap: 16px;
+  }
+  @media (max-width: 620px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* Image container for medium-sized images */
+  .img-medium {
+    width: 100%;
+    max-width: 380px;
+    margin: 16px auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .img-medium img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Two-column image grid */
+  .img-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .imgcover {
+    width: 600px;
+    height: 180px;
+    overflow: hidden;
+    border-radius: var(--radius);  
+    box-shadow: var(--shadow-card);
+  }
+  .imgcover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .imgcover2 {
+    width: 550px;
+    height: 250px;
+  }
+
+  .imgcover3 {
+    width: 600px;
+    height: 330px;
+  }
+
+  .imgcover4 {
+    width: 600px;
+    height: 250px;
+  }
+
+  .imgcover5{
+    width: 450px;
+    height: 650px;
+  }
+
+  .imgcover6{
+    width: 350px;
+    height: 500px;
+  }
+  .imgcover7{
+    width: 1220px;
+    height: 400px;
+  }
+
+  @media (max-width: 620px) {
+    .img-grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* Eco cards: pros/cons */
+  .eco-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 16px;
+  }
+  .eco-card-head {
+    padding: 12px 20px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--secondary);
+  }
+  .eco-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .eco-col {
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-main);
+  }
+  .eco-col:first-child { border-right: 1.5px solid var(--border); }
+  .eco-col-label {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .eco-col-label.pro { color: #2e7d32; }
+  .eco-col-label.con { color: #c62828; }
+  @media (max-width: 620px) {
+    .eco-row { grid-template-columns: 1fr; }
+    .eco-col:first-child { border-right: none; border-bottom: 1.5px solid var(--border); }
+  }
+
+  /* Trayecto steps */
+  .trayecto-step {
+    display: flex;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-card);
+    align-items: flex-start;
+  }
+  .trayecto-icon {
+    width: 46px; height: 46px;
+    border-radius: var(--radius-sm);
+    background: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .trayecto-text h3 {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 5px;
+  }
+  .trayecto-text p {
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.6;
+  }
+
+  /* Boleta analysis table */
+  .boleta-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 20px;
+  }
+  .boleta-table th {
+    background: var(--primary);
+    color: #fff;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 11px 16px;
+    text-align: left;
+    letter-spacing: 0.04em;
+  }
+  .boleta-table td {
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.5;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card);
+    vertical-align: top;
+  }
+  .boleta-table tr:last-child td { border-bottom: none; }
+  .boleta-table tr:nth-child(even) td { background: #f5f9ff; }
+
+  /* Image placeholder */
+  .img-placeholder {
+    border: 2.5px dashed #90caf9;
+    border-radius: var(--radius);
+    padding: 32px 20px;
+    text-align: center;
+    color: #90caf9;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    background: #f0f8ff;
+    margin-top: 12px;
+  }
+  .img-placeholder span { font-size: 30px; display: block; margin-bottom: 8px; }
+
+  /* Critica callout */
+  .critica-callout {
+    background: linear-gradient(90deg, #e3f2fd, #fafeff);
+    border-left: 5px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .critica-callout p {
+    font-size: 15px;
+    color: var(--text-main);
+    line-height: 1.7;
+  }
+
+  /* Slide number badge */
+  .slide-num {
+    position: absolute;
+    top: 14px; right: 18px;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.10em;
+    z-index: 5;
+  }
+
+  /* Number pill */
+  .num-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin-right: 6px;
+  }
+
+  p, li { font-size: 15px; }
+</style>
+</head>
+<body>
+
+<!-- NAV BAR -->
+<nav class="nav-bar">
+  <span class="nav-title">⚡ Sistema Eléctrico – Litoral</span>
+  <div class="nav-slides" id="nav-dots"></div>
+</nav>
+
+<div class="slides-wrapper" id="slides-wrapper">
+
+  <!-- ① CARÁTULA -->
+  <section class="slide slide-cover" id="slide-1">
+    <span class="slide-num">01 / 18</span>
+    <div class="cover-badge">Proyecto de Investigación · 2026</div>
+    <div class="cover-title">Sistema Eléctrico<span>Región Litoral</span></div>
+    <div class="cover-divider"></div>
+    <div class="cover-integrantes">
+      <p>González &nbsp;·&nbsp; Rearte &nbsp;·&nbsp; Soto &nbsp;·&nbsp; Waisbein</p>
+    </div>
+    <div class="cover-inst">Instituto Leonardo Murialdo · 2026</div>
+  </section>
+
+  <!-- ② SEPARADORA: Generación y Distribución -->
+  <section class="slide slide-divider" id="slide-2">
+    <span class="slide-num" style="color:rgba(255,255,255,0.35);">02 / 18</span>
+    <div class="divider-number">02</div>
+    <div class="divider-tag">Capítulo I</div>
+    <div class="divider-title">Generación y<br>Distribución Eléctrica</div>
+    <div class="divider-line"></div>
+    <div class="divider-subtitle">Región Litoral</div>
+  </section>
+
+  <!-- ③ ENTRE RÍOS: Generación y Distribución -->
+  <section class="slide slide-content" id="slide-3">
+    <div class="slide-header">
+      <div class="slide-header-icon">💧</div>
+      <div class="slide-header-text">
+        <h2>Generación y Distribución</h2>
+        <p>Entre Ríos</p>
+      </div>
+      <span class="slide-num">03 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="img-grid-2">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>Generación principal: Hidroeléctrica</div>
+          <p>Entre Ríos genera energía principalmente a través de recursos hidráulicos. La provincia forma parte del <strong>SADI</strong>, por lo que la tensión generada se transmite al resto del país. Gracias a Salto Grande, aporta el <strong>7% de la demanda eléctrica total de Argentina</strong>.</p>
+        </div>
+        <div class="imgcover">
+          <img src="https://www.concordia.gob.ar/sites/default/files/REPRESA-DE-SALTO-GRANDE-1_0.jpg" alt="Represa de Salto Grande">
+        </div>
+      </div>
+      <div class="img-grid-2">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>Complejo Hidroeléctrico Salto Grande</div>
+          <p>Central binacional ubicada sobre el <strong>río Uruguay</strong>. Aprovecha el caudal del río mediante <strong>14 turbinas tipo Kaplan</strong>: la energía mecánica se convierte en energía eléctrica a través de generadores.</p>
+          <div style="margin-top:10px;">
+              <span class="chip">Binacional</span>
+              <span class="chip green">Hidroeléctrica</span>
+              <span class="chip">14 turbinas Kaplan</span>
+          </div>
+        </div>
+        <div class="imgcover">
+            <img src="https://turismociencia.unc.edu.ar/wp-content/uploads/sites/41/nggallery/represa-de-salto-grande/saltogran2a.jpg?t=1690902010" alt="Turbinas Kaplan - Salto Grande">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Centrales Alternativas y de Respaldo</div>
+        <p>Diseñadas para proveer energía extra a empresas, zonas remotas o compensar ante bajo caudal en Salto Grande:</p>
+        <ul>
+          <li><strong>Centrales Térmicas de Respaldo:</strong> Ubicadas en Viale, La Paz y San Salvador.</li>
+          <li><strong>Biomasa (Renovable):</strong> Planta CT Gusa en el Parque Industrial de Ubajay; aprovecha residuos de la industria forestal y maderera local.</li>
+        </ul>
+        <div style="margin-top:10px;">
+          <span class="chip orange">Térmica Respaldo</span>
+          <span class="chip green">Biomasa CT Gusa</span>
+          <span class="chip">Parque Ind. Ubajay</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ SANTA FE: Generación y Distribución -->
+  <section class="slide slide-content" id="slide-4">
+    <div class="slide-header">
+      <div class="slide-header-icon">🔥</div>
+      <div class="slide-header-text">
+        <h2>Generación y Distribución</h2>
+        <p>Santa Fe</p>
+      </div>
+      <span class="slide-num">04 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Generación principal: Térmica de alta eficiencia</div>
+        <p>La generación energética de Santa Fe se sustenta principalmente en <strong>proyectos térmicos de alta eficiencia</strong>. Se utiliza gasoil/diésel para combustión, produciendo vapor que acciona turbinas conectadas a generadores eléctricos. La tensión se transmite a través del <strong>SADI</strong>.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>CT Cogeneración Timbúes (Albanesi)</div>
+          <p>Planta de cogeneración abastecida por la red troncal de gasoductos. Aprovecha el calor residual de los gases de escape y lo entrega a la industria aceitera regional (<strong>Renova</strong>) para su propia generación eléctrica.</p>
+          <div style="margin-top:8px;"><span class="chip green">Cogeneración</span></div>
+          <div class="imgcover imgcover2">
+            <img src="https://www.albanesi.com.ar/gals/en-albanesi-energia/JI_0116.jpg" alt="CT Cogeneración Timbúes" style="width:100%;margin-top:12px;border-radius:8px;box-shadow:0 2px 12px rgba(10,42,110,0.08);">
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>CT Brigadier López (SACDE / Central Puerto)</div>
+          <p>Tecnología de <strong>ciclo combinado</strong>: recupera el calor residual para accionar una turbina de vapor adicional, incrementando la potencia y reduciendo el consumo de combustible.</p>
+          <div style="margin-top:8px;"><span class="chip">Ciclo Combinado</span></div>
+          <div class="imgcover imgcover2">
+            <img src="https://www.sacde.com.ar/wp-content/uploads/2025/06/carrusel-4-ctbl.jpg" alt="CT Brigadier López" style="width:100%;margin-top:12px;border-radius:8px;box-shadow:0 2px 12px rgba(10,42,110,0.08);">
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Generaciones secundarias</div>
+        <ul>
+          <li><strong>Biogás (Renovable):</strong> Generación a partir de residuos orgánicos y descomposición bacteriana.</li>
+          <li><strong>Fotovoltaica:</strong> Parque Solar Calchaquí; aprovechamiento del recurso solar.</li>
+          <li><strong>Hidroeléctrica menor a 50 MW:</strong> Central del Molino Juan Semino S.A. sobre el Río Carcarañá.</li>
+        </ul>
+        <div style="margin-top:10px;">
+          <span class="chip green">Biogás</span>
+          <span class="chip green">Fotovoltaica</span>
+          <span class="chip green">Hidro &lt;50 MW</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ SEPARADORA: Justificación de Tipología -->
+  <section class="slide slide-divider" id="slide-5">
+    <span class="slide-num" style="color:rgba(255,255,255,0.35);">05 / 18</span>
+    <div class="divider-number">05</div>
+    <div class="divider-tag">Capítulo II</div>
+    <div class="divider-title">Justificación de<br>Tipología</div>
+    <div class="divider-line"></div>
+    <div class="divider-subtitle">Región Litoral</div>
+  </section>
+
+  <!-- ⑥ Justificación Entre Ríos -->
+  <section class="slide slide-content" id="slide-6">
+    <div class="slide-header">
+      <div class="slide-header-icon">🌊</div>
+      <div class="slide-header-text">
+        <h2>Justificación de Tipología</h2>
+        <p>Entre Ríos</p>
+      </div>
+      <span class="slide-num">06 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="img-grid-2">
+        <div>
+          <div class="card">
+            <div class="card-title"><span class="dot"></span>Configuración del Río Uruguay</div>
+            <p>A diferencia de otros ríos de la cuenca, el tramo medio del Río Uruguay posee <strong>pendientes naturales aptas</strong> para construir un embalse. Esto permite almacenar agua, generar el desnivel necesario para accionar turbinas y reducir el riesgo de inundaciones que dañarían el entorno natural cercano.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="dot"></span>Caudal y Continuidad</div>
+            <p>El flujo constante del río aporta la energía requerida para sostener una central de la escala de <strong>Salto Grande</strong>, convirtiendo el recurso hídrico en la principal fuente económica de generación de la provincia.</p>
+          </div>
+        </div>
+        <div class="imgcover imgcover3">
+        <img src="https://i.ibb.co/q3GwnxPd/Captura-de-pantalla-2026-05-27-235721.png" alt="Río Uruguay configuración">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Soporte Térmico</div>
+        <p>Las centrales de respaldo en <strong>Viale, La Paz y San Salvador</strong> fueron creadas para compensar los momentos en que el caudal de Salto Grande sea bajo, garantizando el abastecimiento al SADI y la venta al MEM sin interrupciones.</p>
+        <div style="margin-top:10px;"><span class="chip orange">Viale</span><span class="chip orange">La Paz</span><span class="chip orange">San Salvador</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ Justificación Santa Fe -->
+  <section class="slide slide-content" id="slide-7">
+    <div class="slide-header">
+      <div class="slide-header-icon">⚙️</div>
+      <div class="slide-header-text">
+        <h2>Justificación de Tipología</h2>
+        <p>Santa Fe</p>
+      </div>
+      <span class="slide-num">07 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Limitaciones del Río Paraná</div>
+        <p>Se ha considerado la generación hidroeléctrica a través del <strong>Río Paraná</strong>, pero al carecer de una caída de agua natural, una represa convencional no generaría energía suficiente. Además, en un río de llanura, un dique inunda humedales, tierras productivas y centros urbanos costeros.</p>
+        <p style="margin-top:8px;">En los años 90, el <strong>Proyecto Paraná Medio</strong> fue bloqueado mediante una Ley Provincial, debido al impacto ambiental y las protestas ciudadanas en su contra.</p>
+      </div>
+      <div class="img-grid-2">
+        <div class="imgcover imgcover4">
+          <img src="https://i.ibb.co/DPt0hbrx/Captura-de-pantalla-2026-05-27-235459.png" alt="Río Paraná limitaciones">
+        </div>
+        <div class="imgcover imgcover4">
+          <img src="https://i.ibb.co/bjQdsVVP/Captura-de-pantalla-2026-05-28-000306.png" alt="Proyecto Paraná Medio">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Limitaciones de Energías Renovables</div>
+        <p>La generación renovable en la provincia no implica caudales suficientes como para abastecer el sector económico en su totalidad, siendo hasta el momento recursos complementarios.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Por qué la Generación Térmica</div>
+        <p>Para lograr un caudal importante de generación, Santa Fe recurre a la <strong>energía térmica convencional</strong>, aprovechando gasoductos provenientes de otras regiones para obtener gasoil y garantizar el suministro a escala provincial.</p>
+        <div style="margin-top:10px;"><span class="chip">Gasoductos nacionales</span><span class="chip orange">Gasoil / Diésel</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ SEPARADORA: Visión Ecológica -->
+  <section class="slide slide-divider" id="slide-8">
+    <span class="slide-num" style="color:rgba(255,255,255,0.35);">08 / 18</span>
+    <div class="divider-number">08</div>
+    <div class="divider-tag">Capítulo III</div>
+    <div class="divider-title">Visión<br>Ecológica</div>
+    <div class="divider-line"></div>
+    <div class="divider-subtitle">Región Litoral</div>
+  </section>
+
+  <!-- ⑨ Visión Ecológica Santa Fe -->
+  <section class="slide slide-content" id="slide-9">
+    <div class="slide-header">
+      <div class="slide-header-icon">🌿</div>
+      <div class="slide-header-text">
+        <h2>Visión Ecológica</h2>
+        <p>Santa Fe</p>
+      </div>
+      <span class="slide-num">09 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="eco-card">
+        <div class="eco-card-head">⚡ Generación Térmica</div>
+        <div class="eco-row">
+          <div class="eco-col">
+            <div class="eco-col-label con">⚠ Desventajas</div>
+            <p>La combustión de gasoil —recurso no renovable— genera <strong>emisiones continuas de GEI</strong>. También se utilizan recursos hídricos para la refrigeración, afectando tanto la calidad del aire como los ecosistemas acuíferos.</p>
+          </div>
+          <div class="eco-col">
+            <div class="eco-col-label pro">✓ Ventajas</div>
+            <p>Las centrales buscan <strong>aprovechar al máximo la energía</strong> mediante tecnologías que evitan el desperdicio de vapor residual (ciclo combinado, cogeneración), reduciendo el consumo de combustible.</p>
+          </div>
+        </div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-card-head">☀ Energías Renovables Secundarias</div>
+        <div class="eco-row">
+          <div class="eco-col">
+            <div class="eco-col-label pro">✓ Ventajas</div>
+            <p>Las centrales renovables permiten abastecer ciertos sectores de manera <strong>sustentable</strong>: energía fotovoltaica (P.S. Calchaquí) para usuarios-generadores, generación hidroeléctrica (Molino Juan Semino) y biogás para aprovechar residuos naturales.</p>
+          </div>
+          <div class="eco-col">
+            <div class="eco-col-label con">⚠ Consideraciones</div>
+            <p>El <strong>biogás</strong> implica una pequeña cantidad de liberación de Gases de Efecto Invernadero durante el proceso de generación. Sin embargo, el impacto es significativamente menor al de la generación térmica convencional.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑩ Visión Ecológica Entre Ríos -->
+  <section class="slide slide-content" id="slide-10">
+    <div class="slide-header">
+      <div class="slide-header-icon">🌊</div>
+      <div class="slide-header-text">
+        <h2>Visión Ecológica</h2>
+        <p>Entre Ríos</p>
+      </div>
+      <span class="slide-num">10 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="eco-card">
+        <div class="eco-card-head">💧 Salto Grande — Hidroelectricidad de Gran Escala</div>
+        <div class="eco-row">
+          <div class="eco-col">
+            <div class="eco-col-label con">⚠ Desventajas</div>
+            <p>El impacto se produce sobre la <strong>fauna</strong>, interrumpiendo los ciclos de migración natural de las especies nativas. La intervención en el ecosistema provoca cambios estructurales en los niveles de oxígeno y la reproducción bacteriana que mantiene el equilibrio acuático.</p>
+          </div>
+          <div class="eco-col">
+            <div class="eco-col-label pro">✓ Ventajas</div>
+            <p>Es una fuente <strong>renovable</strong> que no genera emisiones de gases contaminantes ni residuos operativos. La central opera programas de monitoreo de la calidad del agua y trabaja para mantener las especies del ecosistema.</p>
+          </div>
+        </div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-card-head">🏭 Centrales Térmicas de Soporte (Viale, La Paz, San Salvador)</div>
+        <div class="eco-row">
+          <div class="eco-col">
+            <div class="eco-col-label con">⚠ Desventajas</div>
+            <p>Al operar con <strong>combustibles fósiles</strong>, generan emisiones de Gases de Efecto Invernadero de manera intermitente pero concentrada durante los picos de demanda.</p>
+          </div>
+          <div class="eco-col">
+            <div class="eco-col-label pro">✓ Rol</div>
+            <p>Funcionan exclusivamente como <strong>respaldo</strong> ante caudal bajo de Salto Grande, minimizando las horas de operación y, por consiguiente, el impacto ambiental total.</p>
+          </div>
+        </div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-card-head">🌲 Biomasa CT Gusa — Parque Industrial Ubajay</div>
+        <div class="eco-row">
+          <div class="eco-col">
+            <div class="eco-col-label pro">✓ Ventajas</div>
+            <p>Reutiliza <strong>residuos de la industria forestal y maderera</strong> local de la provincia, reemplazando combustibles fósiles en la matriz energética y diversificándola con recursos renovables regionales.</p>
+          </div>
+          <div class="eco-col">
+            <div class="eco-col-label con">⚠ Desventajas</div>
+            <p>La combustión de biomasa libera <strong>partículas finas y compuestos gaseosos</strong> contaminantes, lo que requiere sistemas de filtrado adecuados para mitigar el impacto sobre la calidad del aire local.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑪ SEPARADORA: Trayecto de la Energía -->
+  <section class="slide slide-divider" id="slide-11">
+    <span class="slide-num" style="color:rgba(255,255,255,0.35);">11 / 18</span>
+    <div class="divider-number">11</div>
+    <div class="divider-tag">Capítulo IV</div>
+    <div class="divider-title">Trayecto de la<br>Energía en el Litoral</div>
+    <div class="divider-line"></div>
+    <div class="divider-subtitle">Región Litoral</div>
+  </section>
+
+  <!-- ⑫ Trayecto de la Energía -->
+  <section class="slide slide-content" id="slide-12">
+    <div class="slide-header">
+      <div class="slide-header-icon">🔌</div>
+      <div class="slide-header-text">
+        <h2>Trayecto de la Energía en el Litoral</h2>
+        <p>MEM · CAMMESA · Transporte · Distribución</p>
+      </div>
+      <span class="slide-num">12 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="card" style="margin-bottom:18px;">
+        <div class="card-title"><span class="dot"></span>Concepto clave</div>
+        <p>Aunque ambas provincias generan energía, las plantas no alimentan directamente a sus ciudades. Toda la energía producida se entrega obligatoriamente a una red (el <strong>SADI</strong>), desde donde se retoma para el consumo doméstico e industrial a través de un entramado de empresas nacionales y regionales.</p>
+      </div>
+      <div class="imgcover imgcover7">
+        <img src="https://i.imgur.com/0I7h2L3.png" alt="cuadro transmisión electrica">
+      </div>
+    </div>
+  </section>
+ <!-- 
+      <div class="trayecto-step">
+        <div class="trayecto-icon">⚡</div>
+        <div class="trayecto-text">
+          <h3>MEM y CAMMESA — Inyección al Sistema</h3>
+          <p>La energía generada en el Litoral se inyecta de forma inmediata al <strong>SADI</strong> y pasa a formar parte del <strong>Mercado Eléctrico Mayorista (MEM)</strong>. Las distribuidoras provinciales (EPE y ENERSA) declaran su demanda proyectada, y <strong>CAMMESA</strong> autoriza el retiro de la potencia necesaria desde los nodos del SADI. La electricidad consumida puede provenir de otras provincias, según demanda y costos que define CAMMESA.</p>
+        </div>
+      </div>
+
+      <div class="trayecto-step">
+        <div class="trayecto-icon">🔗</div>
+        <div class="trayecto-text">
+          <h3>TRANSENER — Extra Alta Tensión (500 kV)</h3>
+          <p>Transporta la generación a gran escala desde las centrales hacia la transmisión federal. La energía generada eleva su potencia a <strong>500 kV</strong> y se transmite mediante líneas aéreas de extra alta tensión a lo largo del país.</p>
+        </div>
+      </div>
+
+      <div class="trayecto-step">
+        <div class="trayecto-icon">🔋</div>
+        <div class="trayecto-text">
+          <h3>Transba — Alta Tensión (132 kV)</h3>
+          <p>Una vez que la energía llega a las subestaciones transformadoras de 500 kV, la tensión se reduce a <strong>132 kV</strong> para distribución regional. En Entre Ríos, Transba opera vinculando eléctricamente la región con el sistema de Buenos Aires y el resto del Litoral.</p>
+        </div>
+      </div>
+
+      <div class="trayecto-step">
+        <div class="trayecto-icon">🏛</div>
+        <div class="trayecto-text">
+          <h3>ENRE — Control Federal</h3>
+          <p>El <strong>Ente Nacional Regulador de la Electricidad</strong> asegura que las líneas de transmisión que atraviesan Santa Fe y Entre Ríos operen dentro de los estándares de seguridad y calidad establecidos.</p>
+        </div>
+      </div>
+
+      <div class="trayecto-step">
+        <div class="trayecto-icon">🏠</div>
+        <div class="trayecto-text">
+          <h3>EPE y ENERSA — Distribución Provincial</h3>
+          <p>La energía transportada por las redes nacionales es recibida por la <strong>EPE</strong> en Santa Fe y <strong>ENERSA</strong> en Entre Ríos. Estas empresas operan los sistemas troncales internos, reducen la electricidad a <strong>Media y Baja Tensión</strong>, y gestionan la infraestructura (postes, transformadores de manzana, cableado urbano) para que la energía llegue efectivamente al consumidor final.</p>
+        </div>
+      </div>-->
+
+
+  <!-- ⑬ SEPARADORA: Análisis de Boleta -->
+  <section class="slide slide-divider" id="slide-13">
+    <span class="slide-num" style="color:rgba(255,255,255,0.35);">13 / 18</span>
+    <div class="divider-number">13</div>
+    <div class="divider-tag">Capítulo V</div>
+    <div class="divider-title">Análisis de<br>Boleta Eléctrica</div>
+    <div class="divider-line"></div>
+    <div class="divider-subtitle">Región Litoral</div>
+  </section>
+
+  <!-- ⑭ Boleta Santa Fe -->
+  <section class="slide slide-content" id="slide-14">
+    <div class="slide-header">
+      <div class="slide-header-icon">📄</div>
+      <div class="slide-header-text">
+        <h2>Análisis de Boleta Eléctrica</h2>
+        <p>Santa Fe — EPE</p>
+      </div>
+      <span class="slide-num">14 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="grid2-1">
+        <table class="boleta-table">
+          <thead>
+            <tr>
+              <th>Sección(es)</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="num-pill">1</span></td>
+              <td><strong>Identificación de Empresa y Cliente</strong></td>
+              <td>Datos identificatorios de la empresa proveedora y del cliente titular del servicio.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">2</span> <span class="num-pill">6</span></td>
+              <td><strong>Datos Administrativos de la Factura</strong></td>
+              <td>Información administrativa del comprobante: tarifa, período, fechas de emisión y códigos de pago.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">3</span> <span class="num-pill">4</span></td>
+              <td><strong>Datos de Medición y Consumo</strong></td>
+              <td>Información técnica del medidor, lecturas del período y evolución histórica del consumo.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">5</span></td>
+              <td><strong>Detalle de Facturación e Impuestos</strong></td>
+              <td>Desglose económico de la factura: distintos conceptos, impuestos y el importe total a pagar.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">7</span> <span class="num-pill">8</span></td>
+              <td><strong>Vencimientos y Cuotas</strong></td>
+              <td>Fechas de vencimiento, importes por cuota y códigos de barra para realizar el pago.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="imgcover imgcover5">
+          <img src="https://i.imgur.com/si8SBsr.jpeg" alt="Boleta Santa Fé">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑮ Boleta Entre Ríos -->
+  <section class="slide slide-content" id="slide-15">
+    <div class="slide-header">
+      <div class="slide-header-icon">📄</div>
+      <div class="slide-header-text">
+        <h2>Análisis de Boleta Eléctrica</h2>
+        <p>Entre Ríos — ENERSA</p>
+      </div>
+      <span class="slide-num">15 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="grid1-3">
+        <table class="boleta-table">
+          <thead>
+            <tr>
+              <th>Sección(es)</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="num-pill">1</span>–<span class="num-pill">5</span></td>
+              <td><strong>Identificación Empresa y Cliente</strong></td>
+              <td>Datos de la empresa distribuidora (ENERSA) y del cliente: domicilio, CUIT y datos de acceso.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">6</span> <span class="num-pill">7</span></td>
+              <td><strong>Identificación del Comprobante</strong></td>
+              <td>Número de ID, número de factura, código LINK y fecha de emisión.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">8</span>–<span class="num-pill">11</span></td>
+              <td><strong>Datos Fiscales y Categoría del Cliente</strong></td>
+              <td>CUIT, domicilio de suministro, condición frente al IVA y categoría tarifaria.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">12</span> <span class="num-pill">13</span></td>
+              <td><strong>Datos de Medición y Consumo</strong></td>
+              <td>Fechas de lectura, tipo y número de medidor, lecturas anterior y actual, consumo resultante y evolución histórica.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">14</span>–<span class="num-pill">17</span></td>
+              <td><strong>Detalle de Facturación e Impuestos</strong></td>
+              <td>Desglose económico de los conceptos facturados, composición porcentual e importe total, aclarando impuestos no incluidos.</td>
+            </tr>
+            <tr>
+              <td><span class="num-pill">18</span>–<span class="num-pill">20</span></td>
+              <td><strong>Vencimientos y Cuotas</strong></td>
+              <td>Fechas de vencimiento, importes por cuota y códigos de barra para realizar el pago.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="imgcover imgcover6">
+          <img src="https://www.enersa.com.ar/wp-content/uploads/2026/02/PD-Factura-Frente-Celu-726x1024.jpg" alt="Bolet Entre Rios frente">
+        </div>
+        <div class="imgcover imgcover6">
+          <img src="https://www.enersa.com.ar/wp-content/uploads/2026/02/PD-Factura-Dorso-Celu-1-727x1024.jpg" alt="Boleta Entre Ríos Dorso">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑯ SEPARADORA: Crítica al Sistema -->
+  <section class="slide slide-divider" id="slide-16">
+    <span class="slide-num" style="color:rgba(255,255,255,0.35);">16 / 18</span>
+    <div class="divider-number">16</div>
+    <div class="divider-tag">Capítulo VI</div>
+    <div class="divider-title">Crítica al<br>Sistema</div>
+    <div class="divider-line"></div>
+    <div class="divider-subtitle">Región Litoral</div>
+  </section>
+
+  <!-- ⑰ Crítica al Sistema Eléctrico -->
+  <section class="slide slide-content" id="slide-17">
+    <div class="slide-header">
+      <div class="slide-header-icon">⚖️</div>
+      <div class="slide-header-text">
+        <h2>Crítica al Sistema Eléctrico Argentino</h2>
+        <p>Litoral · Desigualdad · Infraestructura · Acceso a la Información</p>
+      </div>
+      <span class="slide-num">17 / 18</span>
+    </div>
+    <div class="slide-body">
+      <div class="critica-callout">
+        <p>A pesar de que el Litoral genera energía limpia a través de <strong>Salto Grande</strong>, sus habitantes pagan boletas de luz mucho más caras que en el AMBA. CAMMESA adquiere esa electricidad a un precio regulado muy bajo y la revende a las empresas provinciales (EPE y ENERSA) a un costo mayorista muy superior. Este sobrecosto por el transporte se traslada directamente a los usuarios.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Fallas de la Tarifa Social</div>
+        <p>Por un mismo consumo básico, un hogar vulnerable paga casi <strong>$19.000 en Santa Fe</strong> y alrededor de <strong>$10.000 en Entre Ríos</strong>. En Entre Ríos, además, las trabas burocráticas impiden que las familias de barrios populares accedan al subsidio, agudizando la inequidad.</p>
+        <div style="margin-top:10px;">
+          <span class="chip red">Santa Fe ~$19.000</span>
+          <span class="chip orange">Entre Ríos ~$10.000</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Deterioro Estructural</div>
+        <p>La falta de inversión mantiene líneas y transformadores obsoletos. En Santa Fe, la <strong>EPE elevó el promedio de corte a casi 12 horas en 2025</strong>. En Entre Ríos, los indicadores de calidad del servicio están <strong>estancados desde hace quince años</strong>.</p>
+        <div style="margin-top:10px;">
+          <span class="chip red">EPE: ~12 hs corte prom. 2025</span>
+          <span class="chip red">ENERSA: indicadores sin mejora 15 años</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Barrera en el Acceso a la Información</div>
+        <p>La investigación de esta problemática choca contra una gran barrera. Muchas centrales eléctricas del país <strong>carecen de sitios web o menciones oficiales</strong>, y las plataformas existentes son tan complejas y poco claras que no solo dificultan el análisis técnico, sino que le impiden al usuario promedio comprender el funcionamiento de un servicio tan básico como la electricidad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑱ CARÁTULA CIERRE -->
+  <section class="slide slide-cover" id="slide-18">
+    <span class="slide-num">18 / 18</span>
+    <div class="cover-badge">Proyecto de Investigación · 2026</div>
+    <div class="cover-title">Sistema Eléctrico<span>Región Litoral</span></div>
+    <div class="cover-divider"></div>
+    <div class="cover-integrantes">
+      <p>González &nbsp;·&nbsp; Rearte &nbsp;·&nbsp; Soto &nbsp;·&nbsp; Waisbein</p>
+    </div>
+    <div class="cover-inst">Instituto Leonardo Murialdo · 2026</div>
+  </section>
+
+</div><!-- /slides-wrapper -->
+
+<script>
+  const totalSlides = 18;
+  const navDots = document.getElementById('nav-dots');
+
+  // Build nav dots
+  for (let i = 1; i <= totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.textContent = i;
+    dot.title = 'Diapositiva ' + i;
+    dot.addEventListener('click', () => {
+      document.getElementById('slide-' + i).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    navDots.appendChild(dot);
+  }
+
+  // Highlight active dot on scroll
+  const slides = Array.from({ length: totalSlides }, (_, i) => document.getElementById('slide-' + (i + 1)));
+  const dots = Array.from(navDots.querySelectorAll('.nav-dot'));
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = slides.indexOf(entry.target);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: 0.4 });
+
+  slides.forEach(s => { if (s) observer.observe(s); });
+</script>
+</body>
+</html>
